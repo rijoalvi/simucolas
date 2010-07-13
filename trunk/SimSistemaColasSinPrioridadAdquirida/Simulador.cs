@@ -10,7 +10,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
     {
         public int valorInfinito=9999999;
         public Double[] lambda;//λ=llegadas por minuto, 1/λ=tiempoe entre llegadas
-        public Double[] historialCliente;
+        public Double[] transcursoCliente;
         public Double mu;//cantidad de clientes que se atienden por unidad tiempo,1/μ= tiempo entre llegas
         public enum Servidor { desocupado = -1, ocupadoPorCliente0 = 0, ocupadoPorCliente1 = 1, ocupadoPorCliente2 = 2 };
         public Double TM;// = hora de la simulación
@@ -161,10 +161,10 @@ namespace SimSistemaColasSinPrioridadAdquirida
             historialClientesTipo0 = new List<Cliente>();
             historialClientesTipo1 = new List<Cliente>();
             historialClientesTipo2 = new List<Cliente>();
-            historialCliente = new Double[3];
-            historialCliente[0] = ly0;
-            historialCliente[1] = ly1;
-            historialCliente[2] = ly2;
+            transcursoCliente = new Double[3];
+            transcursoCliente[0] = ly0;
+            transcursoCliente[1] = ly1;
+            transcursoCliente[2] = ly2;
         }
         public void correr() {
 
@@ -207,21 +207,21 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 
             }
 
-            Wq[0] = Lq[0] / historialCliente[0];
+            Wq[0] = Lq[0] / transcursoCliente[0];
 
             for (int i = 0; i < historialClientesTipo1.Count; i++)
             {
                 Wq[1] = Wq[1] + ((Cliente)historialClientesTipo1[i]).tiempoEsperaCola;
             }
 
-            Wq[1] = Lq[1] / historialCliente[1];
+            Wq[1] = Lq[1] / transcursoCliente[1];
 
             for (int i = 0; i < historialClientesTipo2.Count; i++)
             {
                 Wq[2] = Wq[2] + ((Cliente)historialClientesTipo2[i]).tiempoEsperaCola;
             }
 
-            Wq[2] = Lq[2] / historialCliente[2];
+            Wq[2] = Lq[2] / transcursoCliente[2];
             reportador.close();
 
 
@@ -304,21 +304,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                     DT[i] = valorInfinito;//El departure time del siguiente es infinito, por que acaba de termiar el último de este tipo
                     Cliente clienteASalir = (Cliente)clientesEnColaTipo[elQueVaSaliendo].Dequeue();
                     escribirNuevoEvento(contadorEventos, "salida", clienteASalir.IDGeneral, elQueVaSaliendo, clienteASalir.ID, TM, SS, WL, AT, DT);
-                    //escribirNuevoEvento(contadorEventos, "salida", ((Cliente)clientesEnColaTipo[i].Dequeue()).IDGeneral, i, ((Cliente)clientesEnColaTipo[i].Dequeue()).ID, TM, SS, WL, AT, DT);
-                    /*clienteASalir.setTMFinal(TM);
-
-                    if (clienteASalir.tipo == 0)
-                    {
-                        historialClientesTipo0.Add(clienteASalir);
-                    }
-                    if (clienteASalir.tipo == 1)
-                    {
-                        historialClientesTipo1.Add(clienteASalir);
-                    }
-                    if (clienteASalir.tipo == 2)
-                    {
-                        historialClientesTipo2.Add(clienteASalir);
-                    }*/
+  
 
                     for (int j = i+1; j < 3; j++)
                     {

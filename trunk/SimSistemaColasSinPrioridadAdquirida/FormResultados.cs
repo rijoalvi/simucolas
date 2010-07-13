@@ -84,7 +84,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             catch (Exception e) {
 
                 correrSimulacionButton.Enabled = false;
-                mensajeLabel.Text = "Datos no válidos";
+                mensajeLabel.Text = "Datos no válidos: "+e.Data;
             }
         }
         public void calcularWs() { //calcular los tiempos
@@ -130,7 +130,15 @@ namespace SimSistemaColasSinPrioridadAdquirida
             this.Cursor = Cursors.WaitCursor;
             simulador = new Simulador(Double.Parse(lambda1TextBox.Text), Double.Parse(lambda2TextBox.Text), Double.Parse(lambda3TextBox.Text), Double.Parse(muTextBox.Text), Int32.Parse(MXTextBox.Text));
             simulador.correr();
+            Wq1DiscretoTextBox.Text = simulador.Wq[0].ToString();
+            Wq2DiscretoTextBox.Text = simulador.Wq[1].ToString();
+            Wq3DiscretoTextBox.Text = simulador.Wq[2].ToString();
             this.Cursor = Cursors.Default;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
     }

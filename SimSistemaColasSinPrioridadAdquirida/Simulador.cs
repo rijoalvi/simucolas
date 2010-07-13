@@ -4,8 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+//Luis Carlos Chavarría 
+//Ricardo Alvarado
+//Universidad de Costa Rica
+//Junio-julio 2010
 namespace SimSistemaColasSinPrioridadAdquirida
 {
+    /// <summary>
+    /// Es el cerebro del modelo. Se encarga de controlar el ingreso de clientes, manejo de colas, salida de clientes.  Llama al estadisticador cuando sucede un nuevo evento, y se encarga de desplegar las estadísticas del estadisticador en pantalla una vez terminada la simulación.
+    /// </summary>
     public class Simulador
     {
         public int valorInfinito=9999999;
@@ -70,21 +77,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
        //Double lambdaBuena;
 
 
-        /*public Simulador()
-        {
-            r = new Random();
-            inicializarVariables();
-            historialClientes = new List<Cliente>();
-            estadisticador = new Estadisticador();
-            
-            TM = 0;
 
-            SS = -1;
-
-            MX = 15;
-
-            reportador = new Reportador("reporte1.txt");
-        }*/
         public Simulador(Double lambda0,Double lambda1,Double lambda2,Double mu,int MX)
         {
             r = new Random();
@@ -145,10 +138,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             clientesEnColaTipo[1] = new Queue();
             clientesEnColaTipo[2] = new Queue();
 
-            /*clientesEnColaEnSistema = new Queue[3];
-            clientesEnColaEnSistema[0] = new Queue();
-            clientesEnColaEnSistema[0] = new Queue();
-            clientesEnColaEnSistema[0] = new Queue();*/
+  
             Lq = new Double[3];
             Lq[0] = 0;
             Lq[1] = 0;
@@ -327,7 +317,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             reportador.escribirNuevoEvento(contadorEventos,         tipo,     numeroClienteGeneral,  tipoCliente,numeroClienteTipo,            TM,        SS,    WL,        AT,        DT);
 
             estadisticador.ingresarMilisegundo(TM, WL, SS);
-           // estadisticador.ingresarMinuto(TM, WL, SS);
+    
         }
         private Double generarST(){
            
@@ -335,19 +325,24 @@ namespace SimSistemaColasSinPrioridadAdquirida
             return Ws;
         }
 
+        /// <summary>
+        /// Generars Tiempo entre llegadas según tipo cliente
+        /// </summary>
+        /// <param name="tipoCliente">The tipo cliente.</param>
+        /// <returns></returns>
         private Double generarIT(int tipoCliente)//           1/λ
         {
             Double valor = 0;
-            //Double rand = (r.Next(0, 10099000) / 10000000.0);
+    
             Double promedio=0;
             for (int i = 0; i <100; i++)
             {
-                //Double rand = (r.Next(0, 10000000) / 10000000.0);
+  
                 Double rand = r.NextDouble();
-                //Double rand = (r.Next(0, 11000000) / 10000000.0);
+           
                 if (rand == 0)
                 {
-                    //rand = 0.000000001;
+                 
                     rand = 0.00000001;
                 }
                 valor = (Math.Log(rand) / (lambda[tipoCliente] * -1));
@@ -357,15 +352,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
 
             return promedio;
         }
-       /* public Double calcularTiempoEnCola(){
-            Double tiempoPromedioEnCola = 0;
-            for (int i = 0; i<historialClientes.Count; i++ )
-            {
-                tiempoPromedioEnCola = tiempoPromedioEnCola+historialClientes[i].tiempoEsperaCola;
-            }
-            tiempoPromedioEnCola = tiempoPromedioEnCola / historialClientes.Count;
-            return tiempoPromedioEnCola;
-        }*/
+
         /// <summary>
         /// Calcula el elemento mínimo del vector
         /// </summary>

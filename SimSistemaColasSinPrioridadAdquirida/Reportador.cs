@@ -6,6 +6,9 @@ using System.IO;
 
 namespace SimSistemaColasSinPrioridadAdquirida
 {
+    /// <summary>
+    /// Maneja una bitácora de eventos. Por cada evento que ocurre en el sistema, el reportador se encarga de escribirlo y dejarlo registrado en una bitácora. Esta bitácora en un archivo que se puede encontrar a la par del ejecutable usado para correr el sistema.
+    /// </summary>
     class Reportador
     {
         public TextWriter file;
@@ -61,13 +64,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 at0 = "-";
                 at1 = "-";
             }
-            //String  TMString="";
-            /*if(TM==0){
-                TMString="0";
 
-            }else{
-                TMString = TM.ToString().Substring(0, 5);
-            }*/
             file.WriteLine(
                 numeroEvento + "\t\t\t" +
                 tipoEvento + "(" + tipoCliente + ")\t\t\t" +

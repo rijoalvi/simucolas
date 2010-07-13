@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SimSistemaColasSinPrioridadAdquirida
 {
+    /// <summary>
+    /// Es el elemento que realiza los cálculos de tiempos entre eventos del sistema. Cada evento que sucede es reportado a este, y se encarga de hacer los cálculos y poder ponderar los tiempos. Al final del programa se reportan en la pantalla principal del programa.
+    /// </summary>
     public class Estadisticador
     {
         public List<Minuto> dominioTiempo;

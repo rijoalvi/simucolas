@@ -46,11 +46,15 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 Double a1=rho1;
                 Double a2 = rho1 + rho2;
                 Double a3 = rho1 + rho2 + rho3;
-                Double Wq1 = ((lambda1*tiempoEsperadoServicioCuadrado) / 2)/
-                             ((1-a0)*(1-a1));
-                Double Wq2 = ((lambda2 * tiempoEsperadoServicioCuadrado) / 2) /
+
+                Double numeradorFormula = ((lambda1 * tiempoEsperadoServicioCuadrado) / 2) * ((lambda2 * tiempoEsperadoServicioCuadrado) / 2) * ((lambda3 * tiempoEsperadoServicioCuadrado) / 2);
+   
+
+                Double Wq1 = numeradorFormula/
+                             ((1 - a0) * (1 - a1));
+                Double Wq2 = numeradorFormula /
                              ((1 - a1) * (1 - a2));
-                Double Wq3 = ((lambda3 * tiempoEsperadoServicioCuadrado) / 2) /
+                Double Wq3 = numeradorFormula/
                              ((1 - a2) * (1 - a3));
                 rho1TextBox.Text = rho1.ToString();
                 rho2TextBox.Text = rho2.ToString();

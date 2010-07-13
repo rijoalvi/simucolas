@@ -90,7 +90,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             }
         }
         public void calcularWs() { //calcular los tiempos
-            WsTextBox.Text = (1 / Double.Parse(muTextBox.Text)).ToString();
+         //   WsTextBox.Text = (1 / Double.Parse(muTextBox.Text)).ToString();
         }
         private void label7_Click(object sender, EventArgs e)
         {
@@ -132,9 +132,16 @@ namespace SimSistemaColasSinPrioridadAdquirida
             this.Cursor = Cursors.WaitCursor;
             simulador = new Simulador(Double.Parse(lambda1TextBox.Text), Double.Parse(lambda2TextBox.Text), Double.Parse(lambda3TextBox.Text), Double.Parse(muTextBox.Text), Int32.Parse(MXTextBox.Text));
             simulador.correr();
-            Lq1DiscretoTextBox.Text = Math.Round(simulador.Lq[0],9).ToString();
-            Lq2DiscretoTextBox.Text = Math.Round(simulador.Lq[1],9).ToString();
-            Lq3DiscretoTextBox.Text = Math.Round(simulador.Lq[2],9).ToString();
+            Lq1DiscretoTextBox.Text = simulador.Lq[0].ToString();
+            Lq2DiscretoTextBox.Text = simulador.Lq[1].ToString();
+            Lq3DiscretoTextBox.Text = simulador.Lq[2].ToString();
+            
+            Wq1DiscretoTextBox.Text = simulador.Wq[0].ToString();
+            Wq2DiscretoTextBox.Text = simulador.Wq[1].ToString();
+            Wq3DiscretoTextBox.Text = simulador.Wq[2].ToString();
+
+
+
             this.Cursor = Cursors.Default;
         }
 

@@ -10,6 +10,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
     {
         public int valorInfinito=9999999;
         public Double[] lambda;//λ=llegadas por minuto, 1/λ=tiempoe entre llegadas
+        public Double[] historialCliente;
         public Double mu;//cantidad de clientes que se atienden por unidad tiempo,1/μ= tiempo entre llegas
         public enum Servidor { desocupado = -1, ocupadoPorCliente0 = 0, ocupadoPorCliente1 = 1, ocupadoPorCliente2 = 2 };
         public Double TM;// = hora de la simulación
@@ -35,6 +36,10 @@ namespace SimSistemaColasSinPrioridadAdquirida
         public Double[] IT;
         public Double rho;
         public Queue[] clientesEnColaTipo;
+       // public List<Cliente>[] clientesEnColaEnSistema;
+        public List<Cliente> historialClientesTipo0;
+        public List<Cliente> historialClientesTipo1;
+        public List<Cliente> historialClientesTipo2;
         public int[] WL;
         /// <summary>
         ///  Va enumerando clientes en forma consecutiva no importa su tipo
@@ -49,7 +54,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
         /// Cantidad de clientes esperados en la cola, de cada tipo
         /// </summary>
         public Double[] Lq;
-
+        public Double[] Wq;
         //variables malas
         public int clientesColas;
 
@@ -57,7 +62,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
         public int contadorEventos;
         Queue q = new Queue();
         Queue colaClientes = new Queue();
-        public List<Cliente> historialClientes;
+        public List<Cliente> historialClientesTipo;
         public Random r;
 
         public Estadisticador estadisticador;
@@ -84,7 +89,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
         {
             r = new Random();
             inicializarVariables(lambda0,lambda1,lambda2,mu);
-            historialClientes = new List<Cliente>();
+           // historialClientes = new List<Cliente>();
             estadisticador = new Estadisticador();
 
             TM = 0;
@@ -117,12 +122,12 @@ namespace SimSistemaColasSinPrioridadAdquirida
             clientesEnColaTipo[1] = new Queue();
             clientesEnColaTipo[2] = new Queue();
         }
-        public void inicializarVariables(Double lambda0, Double lambda1, Double lambda2, Double mu)
+        public void inicializarVariables(Double ly0, Double ly1, Double ly2, Double mu)
         {
             lambda = new Double[3];
-            lambda[0] = lambda0;
-            lambda[1] = lambda1;
-            lambda[2] = lambda2;
+            lambda[0] = ly0;
+            lambda[1] = ly1;
+            lambda[2] = ly2;
             numeroCliente = new int[3];
             this.mu = mu;
             AT = new Double[3];
@@ -139,10 +144,27 @@ namespace SimSistemaColasSinPrioridadAdquirida
             clientesEnColaTipo[0] = new Queue();
             clientesEnColaTipo[1] = new Queue();
             clientesEnColaTipo[2] = new Queue();
+
+            /*clientesEnColaEnSistema = new Queue[3];
+            clientesEnColaEnSistema[0] = new Queue();
+            clientesEnColaEnSistema[0] = new Queue();
+            clientesEnColaEnSistema[0] = new Queue();*/
             Lq = new Double[3];
             Lq[0] = 0;
             Lq[1] = 0;
             Lq[2] = 0;
+            Wq = new Double[3];
+            Wq[0] = 0;
+            Wq[1] = 0;
+            Wq[2] = 0;
+
+            historialClientesTipo0 = new List<Cliente>();
+            historialClientesTipo1 = new List<Cliente>();
+            historialClientesTipo2 = new List<Cliente>();
+            historialCliente = new Double[3];
+            historialCliente[0] = ly0;
+            historialCliente[1] = ly1;
+            historialCliente[2] = ly2;
         }
         public void correr() {
 
@@ -177,9 +199,29 @@ namespace SimSistemaColasSinPrioridadAdquirida
             Lq[1] = Lq[1] / estadisticador.dominioMiliSegundo.Count;
             Lq[2] = Lq[2] / estadisticador.dominioMiliSegundo.Count;
 
-            Lq[0] = (Lq[0]) / 1;//me devuelvo a minutos, porque estaba en milisegundos
-            Lq[1] = (Lq[1]) / 1;
-            Lq[2] = (Lq[2]) / 1;
+
+
+            for (int i = 0; i < historialClientesTipo0.Count; i++ )
+            {
+                Wq[0] = Wq[0] + ((Cliente)historialClientesTipo0[i]).tiempoEsperaCola;
+                
+            }
+
+            Wq[0] = Lq[0] / historialCliente[0];
+
+            for (int i = 0; i < historialClientesTipo1.Count; i++)
+            {
+                Wq[1] = Wq[1] + ((Cliente)historialClientesTipo1[i]).tiempoEsperaCola;
+            }
+
+            Wq[1] = Lq[1] / historialCliente[1];
+
+            for (int i = 0; i < historialClientesTipo2.Count; i++)
+            {
+                Wq[2] = Wq[2] + ((Cliente)historialClientesTipo2[i]).tiempoEsperaCola;
+            }
+
+            Wq[2] = Lq[2] / historialCliente[2];
             reportador.close();
 
 
@@ -235,6 +277,22 @@ namespace SimSistemaColasSinPrioridadAdquirida
 
                     //escribirNuevoEvento(contadorEventos, "salida", numeroClienteGeneral, i, numeroCliente[i], TM, SS, WL, AT, DT);
                     Cliente clienteASalir = (Cliente)clientesEnColaTipo[elQueVaSaliendo].Dequeue();
+                    clienteASalir.setTMFinal(TM);
+
+                    if (clienteASalir.tipo==0)
+                    {
+                        historialClientesTipo0.Add(clienteASalir);
+                    }
+                    if (clienteASalir.tipo == 1)
+                    {
+                        historialClientesTipo1.Add(clienteASalir);
+                    }
+                    if (clienteASalir.tipo == 2)
+                    {
+                        historialClientesTipo2.Add(clienteASalir);
+                    }
+
+
                     escribirNuevoEvento(contadorEventos, "salida", clienteASalir.IDGeneral, elQueVaSaliendo, clienteASalir.ID, TM, SS, WL, AT, DT);
 
                     return;
@@ -247,7 +305,20 @@ namespace SimSistemaColasSinPrioridadAdquirida
                     Cliente clienteASalir = (Cliente)clientesEnColaTipo[elQueVaSaliendo].Dequeue();
                     escribirNuevoEvento(contadorEventos, "salida", clienteASalir.IDGeneral, elQueVaSaliendo, clienteASalir.ID, TM, SS, WL, AT, DT);
                     //escribirNuevoEvento(contadorEventos, "salida", ((Cliente)clientesEnColaTipo[i].Dequeue()).IDGeneral, i, ((Cliente)clientesEnColaTipo[i].Dequeue()).ID, TM, SS, WL, AT, DT);
+                    /*clienteASalir.setTMFinal(TM);
 
+                    if (clienteASalir.tipo == 0)
+                    {
+                        historialClientesTipo0.Add(clienteASalir);
+                    }
+                    if (clienteASalir.tipo == 1)
+                    {
+                        historialClientesTipo1.Add(clienteASalir);
+                    }
+                    if (clienteASalir.tipo == 2)
+                    {
+                        historialClientesTipo2.Add(clienteASalir);
+                    }*/
 
                     for (int j = i+1; j < 3; j++)
                     {
@@ -300,7 +371,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
 
             return promedio;
         }
-        public Double calcularTiempoEnCola(){
+       /* public Double calcularTiempoEnCola(){
             Double tiempoPromedioEnCola = 0;
             for (int i = 0; i<historialClientes.Count; i++ )
             {
@@ -308,7 +379,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             }
             tiempoPromedioEnCola = tiempoPromedioEnCola / historialClientes.Count;
             return tiempoPromedioEnCola;
-        }
+        }*/
         /// <summary>
         /// Calcula el elemento mínimo del vector
         /// </summary>

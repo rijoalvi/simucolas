@@ -56,6 +56,7 @@
     <Compile Include="FormResultados.Designer.cs">
       <DependentUpon>FormResultados.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiliSegundo.cs" />
     <Compile Include="Minuto.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

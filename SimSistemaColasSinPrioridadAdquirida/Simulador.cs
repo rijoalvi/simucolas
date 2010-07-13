@@ -44,10 +44,11 @@ namespace SimSistemaColasSinPrioridadAdquirida
         /// Arreglo que con contadores de cada tipo de clientes. Va enumerando clientes en forma consecutiva según su tipo.
         /// </summary>
         public int[] numeroCliente;
-        /// <summary>
-        /// Número de cliente en el sistema
-        /// </summary>
 
+        /// <summary>
+        /// Tiempo esperado en la cola para cada cliente, calculo con el simulador
+        /// </summary>
+        public Double[] Wq;
 
         //variables malas
         public int clientesColas;
@@ -138,6 +139,10 @@ namespace SimSistemaColasSinPrioridadAdquirida
             clientesEnColaTipo[0] = new Queue();
             clientesEnColaTipo[1] = new Queue();
             clientesEnColaTipo[2] = new Queue();
+            Wq = new Double[3];
+            Wq[0] = 0;
+            Wq[1] = 0;
+            Wq[2] = 0;
         }
         public void correr() {
 
@@ -161,6 +166,16 @@ namespace SimSistemaColasSinPrioridadAdquirida
 
 
             }
+
+            for (int i = 0; i < estadisticador.dominioMiliSegundo.Count;i++ )
+            {
+                Wq[0] = Wq[0] + estadisticador.dominioMiliSegundo[i].Wq[0];
+                Wq[1] = Wq[1] + estadisticador.dominioMiliSegundo[i].Wq[1];
+                Wq[2] = Wq[2] + estadisticador.dominioMiliSegundo[i].Wq[2];
+            }
+            Wq[0] = Wq[0] / estadisticador.dominioMiliSegundo.Count;
+            Wq[1] = Wq[1] / estadisticador.dominioMiliSegundo.Count;
+            Wq[2] = Wq[2] / estadisticador.dominioMiliSegundo.Count;
 
             reportador.close();
 
@@ -191,7 +206,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 q.Enqueue(numeroCliente);
                 Cliente clienteAEncolarse=new Cliente(numeroCliente[tipoCliente],tipoCliente,TM,numeroClienteGeneral);
                 clientesEnColaTipo[tipoCliente].Enqueue(clienteAEncolarse);
-                //colaClientes.Enqueue(new Cliente(numeroCliente, -1, TM));
+      
 
             }
             //Generar IT
@@ -212,10 +227,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                     DT[SS] = valorInfinito;//porque si otro tipo estaba el el servicio, el siguiente del mismo tipo va a seguir en la cola, si se atiende otro con más pririodad (por ende no se le asigna DT)
                     SS = i;//ahora el servidor lo tiene este tipo
                     WL[i]--;
-                    if (WL[i]==0)
-                    {
-                        int a = 0;
-                    }
+
                     DT[i] = TM + generarST();//establecer el DT del siguiente
 
                     //escribirNuevoEvento(contadorEventos, "salida", numeroClienteGeneral, i, numeroCliente[i], TM, SS, WL, AT, DT);
@@ -254,8 +266,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             
             reportador.escribirNuevoEvento(contadorEventos,         tipo,     numeroClienteGeneral,  tipoCliente,numeroClienteTipo,            TM,        SS,    WL,        AT,        DT);
 
-           // reportador.escribirNuevoEvento(contadorEventos,tipo,             contadorClientes,       int clienteNumeroTipo,       Double TM,       int SS,         Double[] WL,        Double[] AT,    Double[] DT)
-            //reportador.escribirNuevoEvento(contadorEventos, tipo, contadorClientes, TM, SS, WL, AT, DT);
+            estadisticador.ingresarMilisegundo(TM, WL, SS);
            // estadisticador.ingresarMinuto(TM, WL, SS);
         }
         private Double generarST(){

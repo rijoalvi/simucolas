@@ -32,7 +32,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
         }
         public void ingresarMilisegundo(Double TM, int[] WL, int SS)
         {
-            int milisegundoActual =(int)(TM * 100);
+            int milisegundoActual =(int)(TM * 1000);
             if (contadorTiempo == (milisegundoActual - 1))
             {
                 dominioMiliSegundo.Add(new MiliSegundo(milisegundoActual, WL, SS));
@@ -43,7 +43,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 int inicio = ((int)dominioMiliSegundo[dominioMiliSegundo.Count - 1].TM);
                 for (int i = (inicio + 1); i < milisegundoActual; i++)//interpolación
                 {
-                    dominioMiliSegundo.Add(new MiliSegundo(i, dominioMiliSegundo[dominioMiliSegundo.Count - 1].Wq, dominioMiliSegundo[dominioMiliSegundo.Count - 1].SS));
+                    dominioMiliSegundo.Add(new MiliSegundo(i, dominioMiliSegundo[dominioMiliSegundo.Count - 1].Lq, dominioMiliSegundo[dominioMiliSegundo.Count - 1].SS));
                 }
                 dominioMiliSegundo.Add(new MiliSegundo(milisegundoActual, WL, SS));
             }

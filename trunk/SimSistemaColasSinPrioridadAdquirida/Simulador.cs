@@ -46,9 +46,9 @@ namespace SimSistemaColasSinPrioridadAdquirida
         public int[] numeroCliente;
 
         /// <summary>
-        /// Tiempo esperado en la cola para cada cliente, calculo con el simulador
+        /// Cantidad de clientes esperados en la cola, de cada tipo
         /// </summary>
-        public Double[] Wq;
+        public Double[] Lq;
 
         //variables malas
         public int clientesColas;
@@ -139,10 +139,10 @@ namespace SimSistemaColasSinPrioridadAdquirida
             clientesEnColaTipo[0] = new Queue();
             clientesEnColaTipo[1] = new Queue();
             clientesEnColaTipo[2] = new Queue();
-            Wq = new Double[3];
-            Wq[0] = 0;
-            Wq[1] = 0;
-            Wq[2] = 0;
+            Lq = new Double[3];
+            Lq[0] = 0;
+            Lq[1] = 0;
+            Lq[2] = 0;
         }
         public void correr() {
 
@@ -169,14 +169,17 @@ namespace SimSistemaColasSinPrioridadAdquirida
 
             for (int i = 0; i < estadisticador.dominioMiliSegundo.Count;i++ )
             {
-                Wq[0] = Wq[0] + estadisticador.dominioMiliSegundo[i].Wq[0];
-                Wq[1] = Wq[1] + estadisticador.dominioMiliSegundo[i].Wq[1];
-                Wq[2] = Wq[2] + estadisticador.dominioMiliSegundo[i].Wq[2];
+                Lq[0] = Lq[0] + estadisticador.dominioMiliSegundo[i].Lq[0];
+                Lq[1] = Lq[1] + estadisticador.dominioMiliSegundo[i].Lq[1];
+                Lq[2] = Lq[2] + estadisticador.dominioMiliSegundo[i].Lq[2];
             }
-            Wq[0] = Wq[0] / estadisticador.dominioMiliSegundo.Count;
-            Wq[1] = Wq[1] / estadisticador.dominioMiliSegundo.Count;
-            Wq[2] = Wq[2] / estadisticador.dominioMiliSegundo.Count;
+            Lq[0] = Lq[0] / estadisticador.dominioMiliSegundo.Count;
+            Lq[1] = Lq[1] / estadisticador.dominioMiliSegundo.Count;
+            Lq[2] = Lq[2] / estadisticador.dominioMiliSegundo.Count;
 
+            Lq[0] = (Lq[0]) / 1;//me devuelvo a minutos, porque estaba en milisegundos
+            Lq[1] = (Lq[1]) / 1;
+            Lq[2] = (Lq[2]) / 1;
             reportador.close();
 
 
@@ -284,10 +287,11 @@ namespace SimSistemaColasSinPrioridadAdquirida
             {
                 //Double rand = (r.Next(0, 10000000) / 10000000.0);
                 Double rand = r.NextDouble();
+                //Double rand = (r.Next(0, 11000000) / 10000000.0);
                 if (rand == 0)
                 {
                     //rand = 0.000000001;
-                    rand = 0.001;
+                    rand = 0.00000001;
                 }
                 valor = (Math.Log(rand) / (lambda[tipoCliente] * -1));
                 promedio += valor;

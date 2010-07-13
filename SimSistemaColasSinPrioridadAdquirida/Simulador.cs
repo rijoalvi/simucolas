@@ -188,9 +188,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             Lq[0] = Lq[0] / estadisticador.dominioMiliSegundo.Count;
             Lq[1] = Lq[1] / estadisticador.dominioMiliSegundo.Count;
             Lq[2] = Lq[2] / estadisticador.dominioMiliSegundo.Count;
-            Lq[0] = Lq[0] / 100;// me devuevo a minutos, porque el muestreo fue hecho en milisegundos
-            Lq[1] = Lq[1] / 100;// me devuevo a minutos, porque el muestreo fue hecho en milisegundos
-            Lq[1] = Lq[2] / 100;// me devuevo a minutos, porque el muestreo fue hecho en milisegundos
+            
 
 
             for (int i = 0; i < historialClientesTipo0.Count; i++ )

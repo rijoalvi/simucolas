@@ -47,7 +47,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                 Double a2 = rho1 + rho2;
                 Double a3 = rho1 + rho2 + rho3;
 
-                Double numeradorFormula = ((lambda1 * tiempoEsperadoServicioCuadrado) / 2) * ((lambda2 * tiempoEsperadoServicioCuadrado) / 2) * ((lambda3 * tiempoEsperadoServicioCuadrado) / 2);
+                Double numeradorFormula = ((lambda1 * tiempoEsperadoServicioCuadrado) / 2) + ((lambda2 * tiempoEsperadoServicioCuadrado) / 2) + ((lambda3 * tiempoEsperadoServicioCuadrado) / 2);
    
 
                 Double Wq1 = numeradorFormula/

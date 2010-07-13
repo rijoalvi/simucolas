@@ -169,7 +169,6 @@
             this.muTextBox.ReadOnly = true;
             this.muTextBox.Size = new System.Drawing.Size(60, 20);
             this.muTextBox.TabIndex = 14;
-            this.muTextBox.Text = "10";
             this.muTextBox.TextChanged += new System.EventHandler(this.muTextBox_TextChanged);
             // 
             // label9

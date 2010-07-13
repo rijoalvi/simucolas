@@ -96,7 +96,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
                                     Double DT
                                     )
         {
-            file.WriteLine("* Cliente " + clienteNumeroGeneral + " (" + tipoCliente + ") tomó servidor en el tiempo " + TM + " y se le asigno DT " + DT);
+            file.WriteLine("* Cliente (tipo " + tipoCliente + ") tomó servidor en el tiempo " + TM + " y se le asigno DT " + DT);
         }
         public void close()
         {

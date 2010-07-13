@@ -22,6 +22,8 @@ namespace SimSistemaColasSinPrioridadAdquirida
         private void Form1_Load(object sender, EventArgs e)
         {
             //simulador = new Simulador(Double.Parse(lambda1TextBox.Text),Double.Parse(lambda2TextBox.Text),Double.Parse(lambda3TextBox.Text),Double.Parse(muTextBox.Text),Int32.Parse(MXTextBox.Text));
+            hacerCalculosTiempoEntreLLegadas();
+            calcularMu();
 
         }
         public void hacerCalculos()
@@ -30,7 +32,7 @@ namespace SimSistemaColasSinPrioridadAdquirida
             {
                 mensajeLabel.Text = "";
                 mensajesRhosLabel.Text = "";
-                tiempoEsperadoServicioTextBox.Text = (1 / Double.Parse(muTextBox.Text)).ToString();
+                //tiempoEsperadoServicioTextBox.Text = (1 / Double.Parse(muTextBox.Text)).ToString();
                 tiempoEsperadoServicioCuadradoTextBox.Text = (1 / (Math.Pow(Double.Parse(muTextBox.Text),2))).ToString();
                 Double lambda1 = Double.Parse(lambda1TextBox.Text);
                 Double lambda2 = Double.Parse(lambda2TextBox.Text);
@@ -130,15 +132,61 @@ namespace SimSistemaColasSinPrioridadAdquirida
             this.Cursor = Cursors.WaitCursor;
             simulador = new Simulador(Double.Parse(lambda1TextBox.Text), Double.Parse(lambda2TextBox.Text), Double.Parse(lambda3TextBox.Text), Double.Parse(muTextBox.Text), Int32.Parse(MXTextBox.Text));
             simulador.correr();
-            Wq1DiscretoTextBox.Text = simulador.Wq[0].ToString();
-            Wq2DiscretoTextBox.Text = simulador.Wq[1].ToString();
-            Wq3DiscretoTextBox.Text = simulador.Wq[2].ToString();
+            Lq1DiscretoTextBox.Text = Math.Round(simulador.Lq[0],9).ToString();
+            Lq2DiscretoTextBox.Text = Math.Round(simulador.Lq[1],9).ToString();
+            Lq3DiscretoTextBox.Text = Math.Round(simulador.Lq[2],9).ToString();
             this.Cursor = Cursors.Default;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
+            hacerCalculosTiempoEntreLLegadas();
+        }
 
+        private void tipo1TextBox_TextChanged(object sender, EventArgs e)
+        {
+            hacerCalculosTiempoEntreLLegadas();
+        }
+        private void hacerCalculosTiempoEntreLLegadas() {
+            try
+            {
+                mensajeLabel.Text = "";
+                Double tiempoEntreLlegadasTipo1 = Double.Parse(tipo1TextBox.Text);
+                Double tiempoEntreLlegadasTipo2 = Double.Parse(tipo2TextBox.Text);
+                Double tiempoEntreLlegadasTipo3 = Double.Parse(tipo3TextBox.Text);
+                lambda1TextBox.Text = (1 / tiempoEntreLlegadasTipo1).ToString();
+                lambda2TextBox.Text = (1 / tiempoEntreLlegadasTipo2).ToString();
+                lambda3TextBox.Text = (1 / tiempoEntreLlegadasTipo3).ToString();
+            }
+            catch (Exception ee)
+            {
+                mensajeLabel.Text = "Datos inválidos";
+            }
+        }
+
+        private void tipo2TextBox_TextChanged(object sender, EventArgs e)
+        {
+            hacerCalculosTiempoEntreLLegadas();
+        }
+
+        private void tipo3TextBox_TextChanged(object sender, EventArgs e)
+        {
+            hacerCalculosTiempoEntreLLegadas();
+        }
+
+        private void tiempoEsperadoServicioTextBox_TextChanged(object sender, EventArgs e)
+        {
+            calcularMu();
+        }
+        private void calcularMu() {
+            try
+            {
+                muTextBox.Text = (1 / Double.Parse(tiempoEsperadoServicioTextBox.Text)).ToString();
+            }
+            catch (Exception eee)
+            {
+                mensajeLabel.Text = "Datos no válidos";
+            }
         }
 
     }
